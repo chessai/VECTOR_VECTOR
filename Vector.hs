@@ -2,10 +2,12 @@
 {-# LANGUAGE StandaloneDeriving #-}
 {-# LANGUAGE DataKinds, TypeFamilies, TypeOperators #-}
 {-# LANGUAGE UndecidableInstances #-}
+{-# LANGUAGE RankNTypes #-}
 
 module Vector where
 
 import Prelude hiding (head, tail, append, map, init, last, min, zipWith)
+import Data.Maybe
 
 data Nat = Z | S Nat deriving (Show)
 
@@ -23,9 +25,13 @@ type family   (n :: Nat) :* (m :: Nat) :: Nat where
 
 type family   (n :: Nat) :~ (m :: Nat) :: Nat where
   Z :~ Z         = Z
-  Z :~(S _)      = Z
+  Z :~ (S _)      = Z
   (S _) :~ Z     = Z
   (S m) :~ (S n) = S (m :~ n)
+
+data SNat n where
+  SZ :: SNat Z
+  SS :: SNat n -> SNat (S n)
 
 data Vector (a :: *) (n :: Nat) where
   Nil  :: Vector a Z
@@ -41,9 +47,10 @@ toList :: Vector a n -> [a]
 toList Nil       = []
 toList (x :- xs) = x : toList xs
 
--- FIXME
--- fromList :: Nat -> [a] -> Vector a n
--- NOTE: How to infer length of list?
+fromList :: forall (n :: Nat) a. SNat n -> [a] -> Vector a n
+fromList SZ _            = Nil
+fromList (SS n) (x : xs) = x :- fromList n xs
+fromList (SS n) []       = error "fixme"
 
 head :: Vector a (S n) -> a
 head (x :- _) = x
