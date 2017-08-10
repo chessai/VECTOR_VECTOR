@@ -9,6 +9,8 @@ module Vector where
 import Prelude hiding (head, tail, append, map, init, last, min, zipWith)
 import Data.Maybe
 
+import Control.Applicative ((<$>))
+
 data Nat = Z | S Nat deriving (Show)
 
 infixl 6 :+
@@ -25,7 +27,7 @@ type family   (n :: Nat) :* (m :: Nat) :: Nat where
 
 type family   (n :: Nat) :~ (m :: Nat) :: Nat where
   Z :~ Z         = Z
-  Z :~ (S _)      = Z
+  Z :~ (S _)     = Z
   (S _) :~ Z     = Z
   (S m) :~ (S n) = S (m :~ n)
 
@@ -47,10 +49,10 @@ toList :: Vector a n -> [a]
 toList Nil       = []
 toList (x :- xs) = x : toList xs
 
-fromList :: forall (n :: Nat) a. SNat n -> [a] -> Vector a n
-fromList SZ _            = Nil
-fromList (SS n) (x : xs) = x :- fromList n xs
-fromList (SS n) []       = error "fixme"
+fromList :: forall (n :: Nat) a. SNat n -> [a] -> Maybe (Vector a n)
+fromList SZ _            = Just Nil
+fromList (SS n) (x : xs) = (x :-) <$> fromList n xs
+fromList (SS n) []       = Nothing
 
 head :: Vector a (S n) -> a
 head (x :- _) = x
