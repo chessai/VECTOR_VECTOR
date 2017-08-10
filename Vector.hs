@@ -13,19 +13,19 @@ infixl 6 :+
 infixl 7 :*
 infixl 9 :~
 
-type family   (n :: Nat) :+ (m :: Nat) :: Nat
-type instance Z     :+ m = m
-type instance (S n) :+ m = S (n :+ m)
+type family   (n :: Nat) :+ (m :: Nat) :: Nat where
+  Z     :+ m = m
+  (S n) :+ m = S (n :+ m)
 
-type family   (n :: Nat) :* (m :: Nat) :: Nat
-type instance Z     :* m = Z
-type instance (S n) :* m = (n :* m) :+ m
+type family   (n :: Nat) :* (m :: Nat) :: Nat where
+  Z     :* m = Z
+  (S n) :* m = (n :* m) :+ m
 
-type family   (n :: Nat) :~ (m :: Nat) :: Nat
-type instance Z :~ Z         = Z
-type instance Z :~(S _)      = Z
-type instance (S _) :~ Z     = Z
-type instance (S m) :~ (S n) = S (m :~ n)
+type family   (n :: Nat) :~ (m :: Nat) :: Nat where
+  Z :~ Z         = Z
+  Z :~(S _)      = Z
+  (S _) :~ Z     = Z
+  (S m) :~ (S n) = S (m :~ n)
 
 data Vector (a :: *) (n :: Nat) where
   Nil  :: Vector a Z
