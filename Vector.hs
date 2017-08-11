@@ -6,7 +6,7 @@
 
 module Vector where
 
-import Prelude hiding (head, tail, append, map, init, last, min, zipWith)
+import Prelude hiding (head, tail, append, map, init, last, min, zipWith, null)
 import Data.Maybe
 
 import Control.Applicative ((<$>))
@@ -90,3 +90,7 @@ zipWith _ Nil Nil             = Nil
 zipWith _ Nil (_ :- _)        = Nil
 zipWith _ (_ :- _)   Nil      = Nil
 zipWith f (a :- as) (b :- bs) = f a b :- zipWith f as bs
+
+null :: Vector a n -> Bool
+null Nil = True
+null _   = False
