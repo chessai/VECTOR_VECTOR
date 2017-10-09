@@ -1,12 +1,28 @@
-{-# LANGUAGE GADTs #-}
-{-# LANGUAGE StandaloneDeriving #-}
-{-# LANGUAGE DataKinds, TypeFamilies, TypeOperators #-}
+{-# LANGUAGE NoImplicitPrelude    #-}
+{-# LANGUAGE GADTs                #-}
+{-# LANGUAGE StandaloneDeriving   #-}
+{-# LANGUAGE DataKinds            #-}
+{-# LANGUAGE TypeFamilies         #-}
+{-# LANGUAGE TypeOperators        #-}
 {-# LANGUAGE UndecidableInstances #-}
-{-# LANGUAGE RankNTypes #-}
+{-# LANGUAGE RankNTypes           #-}
 
-module Vector where
+module Vector 
+  ( Vector
+  , toList
+  , fromList
+  , head
+  , tail
+  , append
+  , map
+  , uncons
+  , init
+  , last
+  , zipWith
+  , zipWithSame
+  , null
+  ) where
 
-import Prelude hiding (head, tail, append, map, init, last, min, zipWith, null)
 import Data.Maybe
 
 import Control.Applicative ((<$>))
